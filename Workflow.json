@@ -254,7 +254,7 @@
     {
       "parameters": {
         "operation": "getAll",
-        "limit": 1,
+        "limit": 10,
         "simple": false,
         "filters": {},
         "options": {}
