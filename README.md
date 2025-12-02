@@ -1,18 +1,33 @@
 # 🤖 n8n Gmail AI Auto-Labeler
 
-An intelligent n8n workflow that uses Google Gemini AI to automatically classify and label incoming Gmail emails, keeping your inbox organized.
+An intelligent n8n workflow that uses Google Gemini AI to automatically classify and label Gmail emails, keeping your inbox organized.
 
 ![n8n](https://img.shields.io/badge/n8n-Workflow-EA4B71?logo=n8n)
 ![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI-4285F4?logo=google)
 ![Gmail](https://img.shields.io/badge/Gmail-API-EA4335?logo=gmail)
 
+## 📸 Demo
+
+![Workflow Demo](demo.png)
+
 ## ✨ Features
 
-- 🧠 **AI-Powered Classification** - Uses Google Gemini to analyze email content
-- 📊 **Historical Learning** - 80% majority rule based on sender history
-- 🏷️ **Auto-Labeling** - Applies labels and archives emails automatically
-- 🛡️ **Smart Skip Logic** - Avoids re-processing already labeled emails
-- ⚡ **Real-Time** - Polls Gmail every minute for new unread emails
+### Dual Execution Modes
+- ⚡ **Auto Mode** - Gmail Trigger polls inbox every minute for new unread emails
+- 🔄 **Manual Mode** - Process existing emails in bulk (label past emails)
+
+### AI-Powered Intelligence
+- 🧠 **Google Gemini AI** - Advanced email content analysis
+- 📊 **Historical Learning** - 80% majority rule based on sender patterns
+- 🔍 **Two AI Tools**:
+  - **Get Emails By Sender** - Fetches up to 10 past emails from same sender
+  - **Get Emails By Label** - Retrieves category examples for comparison
+
+### Smart Automation
+- 🏷️ **Auto-Labeling** - Applies correct Gmail labels automatically
+- 📦 **Auto-Archiving** - Removes labeled emails from inbox
+- 🛡️ **Skip Logic** - Prevents re-processing already labeled emails
+- 🔁 **Batch Processing** - Handles multiple emails efficiently
 
 ---
 
@@ -94,19 +109,42 @@ const labelToId = {
 
 ## 🎮 Usage
 
-1. **Test**: Send test emails → Run manual trigger → Verify labels
-2. **Activate**: Toggle workflow to "Active"
-3. **Monitor**: Check "Executions" tab for logs and errors
+### Auto Mode (Real-Time Processing)
+1. **Activate** the workflow (toggle to "Active")
+2. Workflow automatically processes new unread emails every minute
+3. Monitor via "Executions" tab
+
+### Manual Mode (Bulk Processing)
+1. Click **"When clicking 'Execute workflow'"** manual trigger
+2. The "Get many messages" node fetches existing emails (default: 10)
+3. Processes and labels all fetched emails in one execution
+4. Useful for labeling past emails or testing
+
+> **Tip**: Adjust `limit` in "Get many messages" node to process more/fewer emails
 
 ---
 
 ## 🧠 How AI Classification Works
 
-1. **Fetch sender history** (up to 10 previous emails)
-2. **Apply 80% rule** - If 80%+ emails from sender have same label, prefer it
-3. **No history?** - Classify based on subject + body content
-4. **Still uncertain?** - Compare with category examples
-5. **Return** `{ "label": "Category" }` or `{ "label": "None" }`
+The workflow uses a **LangChain AI Agent** with Google Gemini and two custom tools:
+
+### AI Tools Available to Agent
+1. **Get Emails By Sender Email** (Always called first)
+   - Fetches up to 10 historical emails from same sender
+   - Returns: subject, body, previously assigned labels
+   - Enables sender pattern recognition
+
+2. **Get Emails By Label** (Called when uncertain)
+   - Fetches up to 10 examples from a specific label category
+   - Helps compare and confirm classification
+   - Used for edge cases and validation
+
+### Classification Process
+1. **Fetch sender history** using Tool #1
+2. **Apply 80% rule** - If 80%+ sender emails have same label, strongly prefer it
+3. **No history?** - Classify based purely on subject + body content
+4. **Still uncertain?** - Use Tool #2 to compare with category examples
+5. **Return structured JSON**: `{ "label": "Category" }` or `{ "label": "None" }`
 
 ---
 
