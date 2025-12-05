@@ -3,7 +3,7 @@
 > An intelligent **n8n workflow** that automatically classifies and labels Gmail emails using **Google Gemini AI**, keeping your inbox organized with zero manual effort.
 
 ![n8n](https://img.shields.io/badge/n8n-Workflow-EA4B71?logo=n8n)
-![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI-4285F4?logo=google)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI-8E75B2?logo=googlegemini)
 ![Gmail](https://img.shields.io/badge/Gmail-API-EA4335?logo=gmail)
 
 This workflow uses AI-powered classification to analyze email content, learn from sender patterns, and automatically apply appropriate labels while archiving processed emails.
